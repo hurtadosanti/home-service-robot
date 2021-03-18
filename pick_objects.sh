@@ -5,4 +5,4 @@ xterm  -e  " source ../devel/setup.bash;roslaunch turtlebot_gazebo amcl_demo.lau
 sleep 5
 xterm  -e  " source ../devel/setup.bash;roslaunch turtlebot_rviz_launchers view_navigation.launch " & 
 sleep 5
-xterm  -e  " source ../devel/setup.bash;roslaunch turtlebot_teleop keyboard_teleop.launch "
+xterm  -e  " source ../devel/setup.bash; rosrun pick_objects pick_objects; read -p Press_a_Key " 

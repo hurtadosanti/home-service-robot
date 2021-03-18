@@ -37,12 +37,12 @@ int main(int argc, char **argv) {
   ac.waitForResult();
 
   // Check if the robot reached its goal
-  if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+  if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
     ROS_INFO("Hooray, reach pickup");
     reach_pickup = true;
-
-  else
+  }else{
     ROS_INFO("The base failed to move forward 1 meter for some reason");
+  }
 
   // reach pickup zone, wait for next command
   ros::Duration(5).sleep();
@@ -55,11 +55,12 @@ int main(int argc, char **argv) {
 
   // Wait an infinite time for the results
   ac.waitForResult();
-  if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
     ROS_INFO("Hooray, reach drop off");
     reach_drop_off = true;
-  else
+  }else{
     ROS_INFO("The base failed to move to the drop off");
+  }
 
   if(reach_pickup&&reach_drop_off){
     ROS_INFO("Success!");
