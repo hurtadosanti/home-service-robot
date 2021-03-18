@@ -5,7 +5,9 @@
 // Define a client for to send goal requests to the move_base server through a SimpleActionClient
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-int main(int argc, char** argv){
+int main(int argc, char **argv) {
+  bool reach_pickup = false;
+  bool reach_drop_off = false;
   // Initialize the simple_navigation_goals node
   ros::init(argc, argv, "pick_objects");
 
@@ -13,7 +15,7 @@ int main(int argc, char** argv){
   MoveBaseClient ac("move_base", true);
 
   // Wait 5 sec for move_base action server to come up
-  while(!ac.waitForServer(ros::Duration(5.0))){
+  while (!ac.waitForServer(ros::Duration(5.0))) {
     ROS_INFO("Waiting for the move_base action server to come up");
   }
 
@@ -27,7 +29,7 @@ int main(int argc, char** argv){
   goal.target_pose.pose.position.x = 1.0;
   goal.target_pose.pose.orientation.w = 1.0;
 
-   // Send the goal position and orientation for the robot to reach
+  // Send the goal position and orientation for the robot to reach
   ROS_INFO("Sending goal");
   ac.sendGoal(goal);
 
@@ -35,10 +37,32 @@ int main(int argc, char** argv){
   ac.waitForResult();
 
   // Check if the robot reached its goal
-  if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Hooray, the base moved 1 meter forward");
+  if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("Hooray, reach pickup");
+    reach_pickup = true;
+
   else
     ROS_INFO("The base failed to move forward 1 meter for some reason");
 
+  // reach pickup zone, wait for next command
+  ros::Duration(5).sleep();
+
+  goal.target_pose.pose.position.x = 2.0;
+  goal.target_pose.pose.orientation.w = 1.0;
+
+  ROS_INFO("Sending goal");
+  ac.sendGoal(goal);
+
+  // Wait an infinite time for the results
+  ac.waitForResult();
+  if (ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("Hooray, reach drop off");
+    reach_drop_off = true;
+  else
+    ROS_INFO("The base failed to move to the drop off");
+
+  if(reach_pickup&&reach_drop_off){
+    ROS_INFO("Success!");
+  }
   return 0;
 }
