@@ -50,9 +50,25 @@ int main( int argc, char** argv )
     marker.color.a = 1.0;
 
     marker.lifetime = ros::Duration();
-
+	ROS_INFO("Publish Marker");
     marker_pub.publish(marker);
-
+	ROS_INFO("sleep");
+    // Cycle between different shapes
+    switch (shape)
+    {
+    case visualization_msgs::Marker::CUBE:
+      shape = visualization_msgs::Marker::SPHERE;
+      break;
+    case visualization_msgs::Marker::SPHERE:
+      shape = visualization_msgs::Marker::ARROW;
+      break;
+    case visualization_msgs::Marker::ARROW:
+      shape = visualization_msgs::Marker::CYLINDER;
+      break;
+    case visualization_msgs::Marker::CYLINDER:
+      shape = visualization_msgs::Marker::CUBE;
+      break;
+    }
     r.sleep();
   }
 }
