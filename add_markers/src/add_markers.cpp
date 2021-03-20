@@ -1,5 +1,11 @@
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
+#include <nav_msgs/Odometry.h>
+
+void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
+{
+  ROS_INFO("I heard: [%s]", msg->data.c_str());
+}
 
 int main(int argc, char **argv) {
     ros::init(argc, argv, "add_markers");
@@ -9,6 +15,8 @@ int main(int argc, char **argv) {
 
     // Set our initial shape type to be a cube
     uint32_t shape = visualization_msgs::Marker::CUBE;
+
+    ros::Subscriber sub = n.subscribe("/odom", 1000, odometry_callback);
 
     while (ros::ok()) {
         visualization_msgs::Marker marker;
