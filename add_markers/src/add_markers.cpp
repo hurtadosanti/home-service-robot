@@ -4,11 +4,12 @@
 #include <math.h>
 
 
-int pickup_x=0;
-int pickup_y=0;
+double pickup_x=-2.0;
+double pickup_y=2.0;
 
-int drop_x=5;
-int drop_y=5;
+double drop_x=3.0;
+double drop_y=3.0;
+
 
 enum state {PICKING_UP,DROPING,DROPED};
 
@@ -20,23 +21,27 @@ double distance(double x2,double y2,double x1,double y1){
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
     
-    ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
+    //ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
+  	double drop_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
+    double dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
     switch (actual_state)
-    {
+    {    
         case PICKING_UP:
-            if(distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y)<0.5){
-                ROS_INFO("Move to droping");
+        	
+            if(drop_dist<0.05){
+                ROS_INFO("Move to droping %f",drop_dist);
                 actual_state=DROPING;
             }
             break;
         case DROPING:
-            if(distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y)<0.5){
-                ROS_INFO("Move to droped");
+     
+            if(dist<0.05){
+                ROS_INFO("Move to droped %f",dist);
                 actual_state=DROPED;
             }
             break;
     }
-    ROS_INFO("end");
+    //ROS_INFO(actual_state);
 }
 
 int main(int argc, char **argv) {

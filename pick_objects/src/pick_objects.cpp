@@ -5,11 +5,11 @@
 // Define a client for to send goal requests to the move_base server through a SimpleActionClient
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-int pickup_x=0;
-int pickup_y=0;
+double pickup_x=-2.0;
+double pickup_y=2.0;
 
-int drop_x=5;
-int drop_y=5;
+double drop_x=3.0;
+double drop_y=3.0;
 
 int main(int argc, char **argv) {
   bool reach_pickup = false;
@@ -34,6 +34,7 @@ int main(int argc, char **argv) {
   // Define a position and orientation for the robot to reach
   goal.target_pose.pose.position.x = pickup_x;
   goal.target_pose.pose.position.y = pickup_y;
+  goal.target_pose.pose.orientation.w = 1.0;
 
   // Send the goal position and orientation for the robot to reach
   ROS_INFO("Sending goal");
@@ -55,6 +56,7 @@ int main(int argc, char **argv) {
 
   goal.target_pose.pose.position.x = drop_x;
   goal.target_pose.pose.position.y = drop_y;
+  goal.target_pose.pose.orientation.w = 1.0;
 
   ROS_INFO("Sending goal");
   ac.sendGoal(goal);
