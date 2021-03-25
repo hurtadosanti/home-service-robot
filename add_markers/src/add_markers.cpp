@@ -19,20 +19,18 @@ double distance(double x2,double y2,double x1,double y1){
 
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
-    auto pos = msg->pose.pose.position; 
-    ROS_INFO("Position-> x: [%f], y: [%f]", pos.x,pos.y);
-    auto x = pos.x;
-    auto y = pos.y;
+    
+    ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
     switch (actual_state)
     {
         case PICKING_UP:
-            if(distance(pickup_x,x,pickup_y,y)<0.5){
+            if(distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y)<0.5){
                 ROS_INFO("Move to droping");
                 actual_state=DROPING;
             }
             break;
         case DROPING:
-            if(distance(drop_x,x,drop_y,y)<0.5){
+            if(distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y)<0.5){
                 ROS_INFO("Move to droped");
                 actual_state=DROPED;
             }
