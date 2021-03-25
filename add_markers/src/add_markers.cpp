@@ -1,13 +1,44 @@
 #include <ros/ros.h>
 #include <visualization_msgs/Marker.h>
 #include <nav_msgs/Odometry.h>
+#include <math.h>
+
+
+int pickup_x=0;
+int pickup_y=0;
+
+int drop_x=5;
+int drop_y=5;
+
+enum state {PICKING_UP,DROPING,DROPED};
+
+state actual_state = PICKING_UP;
+double distance(double x2,double y2,double x1,double y1){
+    sqrt(pow(x2-x1,2)+pow(y2-y1,2));
+}
 
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
-  ROS_INFO("Seq: [%d]", msg->header.seq);
-  ROS_INFO("Position-> x: [%f], y: [%f], z: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y, msg->pose.pose.position.z);
-  ROS_INFO("Orientation-> x: [%f], y: [%f], z: [%f], w: [%f]", msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
-  ROS_INFO("Vel-> Linear: [%f], Angular: [%f]", msg->twist.twist.linear.x,msg->twist.twist.angular.z);
+    auto pos = msg->pose.pose.position; 
+    ROS_INFO("Position-> x: [%f], y: [%f]", pos.x,pos.y);
+    auto x = pos.x;
+    auto y = pos.y;
+    switch (actual_state)
+    {
+        case PICKING_UP:
+            if(distance(pickup_x,x,pickup_y,y)<0.5){
+                ROS_INFO("Move to droping");
+                actual_state=DROPING;
+            }
+            break;
+        case DROPING:
+            if(distance(drop_x,x,drop_y,y)<0.5){
+                ROS_INFO("Move to droped");
+                actual_state=DROPED;
+            }
+            break;
+    }
+    ROS_INFO("end");
 }
 
 int main(int argc, char **argv) {
@@ -20,8 +51,11 @@ int main(int argc, char **argv) {
     uint32_t shape = visualization_msgs::Marker::CUBE;
 
     ros::Subscriber sub = n.subscribe("/odom", 1000, odometry_callback);
-    
-    ros::spin();
-    
+    ROS_INFO("1");
+    if(actual_state!=DROPED){
+        ros::spin();
+        ROS_INFO("2");
+    }
+    ROS_INFO("3");
     return 0;
 }
