@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
     marker_pub.publish(marker);
 
     while (ros::ok()){
-        if(state==PUBLISH_TARGET){
+        if(actual_state==PUBLISH_TARGET){
             ROS_INFO("Publish at drop zone");
             marker.action = visualization_msgs::Marker::DELETE;
             marker_pub.publish(marker);
@@ -82,8 +82,8 @@ int main(int argc, char **argv) {
             marker.pose.position.y = pickup_y;
             marker.action = visualization_msgs::Marker::ADD;
             marker_pub.publish(marker);
-            state=DROPING;
-        }else if(state==DROPED){
+            actual_state=DROPING;
+        }else if(actual_state==DROPED){
             ROS_INFO("Droped");
             break;
         }
