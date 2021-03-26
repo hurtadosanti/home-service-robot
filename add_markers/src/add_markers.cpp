@@ -14,28 +14,26 @@ double drop_y=3.0;
 enum state {PICKING_UP,PUBLISH_TARGET,DROPING,DROPED};
 
 state actual_state = PICKING_UP;
-double distance(double x2,double y2,double x1,double y1){
+double distance(double x2,double x1,double y2,double y1){
     return sqrt(pow(x2-x1,2)+pow(y2-y1,2));
 }
 
-void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
-{
-    
+void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg){
     //ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
-  	double drop_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
-    double dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
-    ROS_INFO("Distance pickup: %f  drop: %f",drop_dist,dist);
+  	double pickup_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
+    double drop_dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
+    ROS_INFO("Distance pickup: %f  drop: %f position:x%f y%f",pickup_dist,drop_dist,msg->pose.pose.position.x,msg->pose.pose.position.y);
     switch (actual_state)
     {    
         case PICKING_UP:
-            if(drop_dist<0.05){
-                ROS_INFO("Move to droping %f",drop_dist);
+            if(pickup_dist<0.5){
+                ROS_INFO("Move to droping %f",pickup_dist);
                 actual_state=PUBLISH_TARGET;
             }
             break;
         case DROPING:
-            if(dist<0.05){
-                ROS_INFO("Move to droped %f",dist);
+            if(drop_dist<0.5){
+                ROS_INFO("Move to droped %f",drop_dist);
                 actual_state=DROPED;
             }
             break;
@@ -52,7 +50,7 @@ int main(int argc, char **argv) {
     // Set our initial shape type to be a cube
     uint32_t shape = visualization_msgs::Marker::CUBE;
 
-    ros::Subscriber sub = n.subscribe("/odom", 1000, odometry_callback);
+    ros::Subscriber sub = n.subscribe("odom", 100, odometry_callback);
 
     visualization_msgs::Marker marker;
     
@@ -89,7 +87,7 @@ int main(int argc, char **argv) {
             ROS_INFO("Droped");
             break;
         }
-        r.sleep();
+        ros::spin();
         ROS_INFO("Done");    
     }
     ROS_INFO("Done");
