@@ -52,13 +52,15 @@ int main(int argc, char **argv) {
     ros::Subscriber sub = n.subscribe("odom", 100, odometry_callback);
 
     visualization_msgs::Marker marker;
-    
+    marker.header.frame_id = "/map";
+    marker.header.stamp = ros::Time::now();
     marker.type = visualization_msgs::Marker::CUBE;
     marker.ns = "add_markers";
     marker.id = 0;
     marker.action = visualization_msgs::Marker::ADD;
     marker.pose.position.x = pickup_x;
     marker.pose.position.y = pickup_y;
+    marker.pose.position.z = 0;
 
     marker.scale.x = 1.0;
     marker.scale.y = 1.0;
@@ -68,6 +70,9 @@ int main(int argc, char **argv) {
     marker.color.g = 1.0f;
     marker.color.b = 0.0f;
     marker.color.a = 1.0;
+
+    marker.lifetime = ros::Duration();
+
     ROS_INFO("Publish at pickup");
     marker_pub.publish(marker);
 
