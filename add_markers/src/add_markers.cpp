@@ -15,15 +15,16 @@ enum state {PICKING_UP,PUBLISH_TARGET,DROPING,DROPED};
 
 state actual_state = PICKING_UP;
 double distance(double x2,double y2,double x1,double y1){
-    sqrt(pow(x2-x1,2)+pow(y2-y1,2));
+    return sqrt(pow(x2-x1,2)+pow(y2-y1,2));
 }
 
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
-    ROS_INFO("Odom");
+    
     //ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
   	double drop_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
     double dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
+    ROS_INFO("Distance pickup: %f  drop: %f",drop_dist,dist);
     switch (actual_state)
     {    
         case PICKING_UP:
