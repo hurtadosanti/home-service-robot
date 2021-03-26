@@ -20,6 +20,7 @@ double distance(double x2,double y2,double x1,double y1){
 
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
+    ROS_INFO("Odom");
     //ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
   	double drop_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
     double dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
@@ -69,7 +70,7 @@ int main(int argc, char **argv) {
     marker.color.g = 1.0f;
     marker.color.b = 0.0f;
     marker.color.a = 1.0;
-
+    ROS_INFO("Publish at pickup");
     marker_pub.publish(marker);
 
     while (ros::ok()){
@@ -88,6 +89,7 @@ int main(int argc, char **argv) {
             break;
         }
         r.sleep();
+        ROS_INFO("Done");    
     }
     ROS_INFO("Done");
     return 0;
