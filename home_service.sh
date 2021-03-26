@@ -3,9 +3,9 @@ xterm  -e  " source ../devel/setup.bash;roslaunch turtlebot_gazebo turtlebot_wor
 sleep 5
 xterm  -e  " source ../devel/setup.bash;roslaunch turtlebot_gazebo amcl_demo.launch" &
 sleep 5
-xterm  -e  " source ../devel/setup.bash;roslaunch turtlebot_rviz_launchers view_navigation.launch " & 
+xterm  -e  " source ../devel/setup.bash;roslaunch add_markers navigation.launch " & 
 sleep 5
-#xterm  -e  " source ../devel/setup.bash;rosrun add_markers add_markers "&
-#sleep 5
-#xterm  -e  " source ../devel/setup.bash;rosrun pick_objects pick_objects "
+xterm  -e  " source ../devel/setup.bash;rosrun add_markers add_markers "&
+sleep 5
+xterm  -e  " source ../devel/setup.bash;rosrun pick_objects pick_objects "
 
