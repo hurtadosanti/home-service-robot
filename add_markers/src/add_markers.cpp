@@ -4,11 +4,11 @@
 #include <math.h>
 
 
-double pickup_x=-1.0;
-double pickup_y=1.0;
+double pickup_x=-3.0;
+double pickup_y=2.0;
 
-double drop_x=2.0;
-double drop_y=1.0;
+double drop_x=0.0;
+double drop_y=-1.0;
 
 
 enum state {PICKING_UP,PUBLISH_TARGET,DROPING,DROPED};
@@ -21,7 +21,7 @@ double distance(double x2,double x1,double y2,double y1){
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg){
   	double pickup_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
     double drop_dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
-    //ROS_INFO("Pickup: %f  drop: %f position:x%f y%f",pickup_dist,drop_dist,msg->pose.pose.position.x,msg->pose.pose.position.y);
+    ROS_INFO("Pickup: %f  drop: %f position:x%f y%f",pickup_dist,drop_dist,msg->pose.pose.position.x,msg->pose.pose.position.y);
     //ROS_INFO_STREAM("state:"<<actual_state);
     switch (actual_state)
     {    
@@ -32,7 +32,7 @@ void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg){
             }
             break;
         case DROPING:
-            if(drop_dist<0.5){
+            if(drop_dist<0.6){
                 ROS_INFO("Move to droped %f",drop_dist);
                 actual_state=DROPED;
             }
@@ -73,16 +73,17 @@ int main(int argc, char **argv) {
 
     marker.lifetime = ros::Duration();
 
-    marker.action = visualization_msgs::Marker::ADD;
-    marker_pub.publish(marker);
-    ros::Duration(2).sleep();
-    ROS_INFO("Publish pickup marker");
-
     while (ros::ok()){
         //ROS_INFO_STREAM("state:"<<actual_state);
+        if(actual_state==PICKING_UP){           
+            marker.pose.position.x = pickup_x;
+            marker.pose.position.y = pickup_y;
+            marker.pose.position.z = 0;
+            marker.action = visualization_msgs::Marker::ADD;    
+            marker_pub.publish(marker);
+        }
         if(actual_state==PUBLISH_TARGET){
             ROS_INFO("Publish at drop zone");
-            ros::Duration(2).sleep();
             marker.action = visualization_msgs::Marker::DELETE;
             marker_pub.publish(marker);
             marker.pose.position.x = drop_x;
@@ -91,9 +92,8 @@ int main(int argc, char **argv) {
             marker.action = visualization_msgs::Marker::ADD;
             marker_pub.publish(marker);
             actual_state=DROPING;
-        }else if(actual_state==DROPED){
+        }if(actual_state==DROPED){
             ROS_INFO("Droped");
-            ros::Duration(2).sleep();
             marker.action = visualization_msgs::Marker::DELETE;
             marker_pub.publish(marker);
             break;
