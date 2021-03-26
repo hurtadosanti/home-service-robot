@@ -11,7 +11,7 @@ double drop_x=3.0;
 double drop_y=3.0;
 
 
-enum state {PICKING_UP,DROPING,DROPED};
+enum state {PICKING_UP,PUBLISH_TARGET,DROPING,DROPED};
 
 state actual_state = PICKING_UP;
 double distance(double x2,double y2,double x1,double y1){
@@ -20,45 +20,75 @@ double distance(double x2,double y2,double x1,double y1){
 
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg)
 {
-    
     //ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
   	double drop_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
     double dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
     switch (actual_state)
     {    
         case PICKING_UP:
-        	
             if(drop_dist<0.05){
                 ROS_INFO("Move to droping %f",drop_dist);
-                actual_state=DROPING;
+                actual_state=PUBLISH_TARGET;
             }
             break;
         case DROPING:
-     
             if(dist<0.05){
                 ROS_INFO("Move to droped %f",dist);
                 actual_state=DROPED;
             }
             break;
     }
-    //ROS_INFO(actual_state);
+    ROS_INFO_STREAM("State:"<<actual_state);
 }
 
 int main(int argc, char **argv) {
     ros::init(argc, argv, "add_markers");
     ros::NodeHandle n;
-    ros::Rate r(1);
+    ros::Rate r(5);
     ros::Publisher marker_pub = n.advertise<visualization_msgs::Marker>("visualization_marker", 1);
 
     // Set our initial shape type to be a cube
     uint32_t shape = visualization_msgs::Marker::CUBE;
 
     ros::Subscriber sub = n.subscribe("/odom", 1000, odometry_callback);
-    ROS_INFO("1");
-    if(actual_state!=DROPED){
-        ros::spin();
-        ROS_INFO("2");
+
+    visualization_msgs::Marker marker;
+    
+    marker.type = visualization_msgs::Marker::CUBE;
+    marker.ns = "add_markers";
+    marker.id = 0;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = pickup_x;
+    marker.pose.position.y = pickup_y;
+
+    marker.scale.x = 1.0;
+    marker.scale.y = 1.0;
+    marker.scale.z = 1.0;
+
+    marker.color.r = 0.0f;
+    marker.color.g = 1.0f;
+    marker.color.b = 0.0f;
+    marker.color.a = 1.0;
+
+    marker_pub.publish(marker);
+
+    while (ros::ok()){
+        if(state==PUBLISH_TARGET){
+            ROS_INFO("Publish at drop zone");
+            marker.action = visualization_msgs::Marker::DELETE;
+            marker_pub.publish(marker);
+            r.sleep();
+            marker.pose.position.x = pickup_x;
+            marker.pose.position.y = pickup_y;
+            marker.action = visualization_msgs::Marker::ADD;
+            marker_pub.publish(marker);
+            state=DROPING;
+        }else if(state==DROPED){
+            ROS_INFO("Droped");
+            break;
+        }
+        r.sleep();
     }
-    ROS_INFO("3");
+    ROS_INFO("Done");
     return 0;
 }
