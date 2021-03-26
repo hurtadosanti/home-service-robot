@@ -19,10 +19,9 @@ double distance(double x2,double x1,double y2,double y1){
 }
 
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg){
-    //ROS_INFO("Position-> x: [%f], y: [%f]", msg->pose.pose.position.x,msg->pose.pose.position.y);
   	double pickup_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
     double drop_dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
-    ROS_INFO("Distance pickup: %f  drop: %f position:x%f y%f",pickup_dist,drop_dist,msg->pose.pose.position.x,msg->pose.pose.position.y);
+    //ROS_INFO("Distance pickup: %f  drop: %f position:x%f y%f",pickup_dist,drop_dist,msg->pose.pose.position.x,msg->pose.pose.position.y);
     switch (actual_state)
     {    
         case PICKING_UP:
@@ -38,7 +37,6 @@ void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg){
             }
             break;
     }
-    ROS_INFO_STREAM("State:"<<actual_state);
 }
 
 int main(int argc, char **argv) {
@@ -88,7 +86,6 @@ int main(int argc, char **argv) {
             break;
         }
         ros::spin();
-        ROS_INFO("Done");    
     }
     ROS_INFO("Done");
     return 0;
