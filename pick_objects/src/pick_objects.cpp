@@ -5,11 +5,12 @@
 // Define a client for to send goal requests to the move_base server through a SimpleActionClient
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-double pickup_x=-2.0;
-double pickup_y=-2.0;
+
+double pickup_x=-1.0;
+double pickup_y=1.0;
 
 double drop_x=2.0;
-double drop_y=2.0;
+double drop_y=1.0;
 
 int main(int argc, char **argv) {
   bool reach_pickup = false;
@@ -48,7 +49,7 @@ int main(int argc, char **argv) {
     ROS_INFO("Hooray, reach pickup");
     reach_pickup = true;
   }else{
-    ROS_INFO("The base failed to move forward 1 meter for some reason");
+    ROS_INFO("The base failed to move forward for some reason");
   }
 
   // reach pickup zone, wait for next command
@@ -64,7 +65,7 @@ int main(int argc, char **argv) {
   // Wait an infinite time for the results
   ac.waitForResult();
   if(ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED){
-    ROS_INFO("Hooray, reach drop off");
+    ROS_INFO("Reach drop off");
     reach_drop_off = true;
   }else{
     ROS_INFO("The base failed to move to the drop off");

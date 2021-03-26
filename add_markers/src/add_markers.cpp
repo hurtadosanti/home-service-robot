@@ -4,11 +4,11 @@
 #include <math.h>
 
 
-double pickup_x=-2.0;
-double pickup_y=-2.0;
+double pickup_x=-1.0;
+double pickup_y=1.0;
 
 double drop_x=2.0;
-double drop_y=2.0;
+double drop_y=1.0;
 
 
 enum state {PICKING_UP,PUBLISH_TARGET,DROPING,DROPED};
@@ -57,14 +57,14 @@ int main(int argc, char **argv) {
     marker.type = visualization_msgs::Marker::CUBE;
     marker.ns = "add_markers";
     marker.id = 0;
-    marker.action = visualization_msgs::Marker::ADD;
+    
     marker.pose.position.x = pickup_x;
     marker.pose.position.y = pickup_y;
     marker.pose.position.z = 0;
 
-    marker.scale.x = 1.0;
-    marker.scale.y = 1.0;
-    marker.scale.z = 1.0;
+    marker.scale.x = 0.3;
+    marker.scale.y = 0.3;
+    marker.scale.z = 0.3;
 
     marker.color.r = 0.0f;
     marker.color.g = 1.0f;
@@ -73,22 +73,29 @@ int main(int argc, char **argv) {
 
     marker.lifetime = ros::Duration();
 
-    ROS_INFO("Publish at pickup");
+    marker.action = visualization_msgs::Marker::ADD;
     marker_pub.publish(marker);
+    ros::Duration(2).sleep();
+    ROS_INFO("Publish pickup marker");
 
     while (ros::ok()){
+        //ROS_INFO_STREAM("state:"<<actual_state);
         if(actual_state==PUBLISH_TARGET){
             ROS_INFO("Publish at drop zone");
+            ros::Duration(2).sleep();
             marker.action = visualization_msgs::Marker::DELETE;
             marker_pub.publish(marker);
-            r.sleep();
-            marker.pose.position.x = pickup_x;
-            marker.pose.position.y = pickup_y;
+            marker.pose.position.x = drop_x;
+            marker.pose.position.y = drop_y;
+            marker.pose.position.z = 0;
             marker.action = visualization_msgs::Marker::ADD;
             marker_pub.publish(marker);
             actual_state=DROPING;
         }else if(actual_state==DROPED){
             ROS_INFO("Droped");
+            ros::Duration(2).sleep();
+            marker.action = visualization_msgs::Marker::DELETE;
+            marker_pub.publish(marker);
             break;
         }
         ros::spinOnce();
