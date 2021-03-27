@@ -1,4 +1,5 @@
 # Home Service Robot
+
 On this project we simulate a full home service robot capable of navigating to pick up and deliver virtual objects. The robot we use is the turtlebot provided by ROS. The robot is capable to localize, map and navigate using a fusion of LIDAR, camera and odometer. We have used the SLAM_gmapping module and the AMCL adaptive Monte Carlo localization provided by ROS.
 
 ---
@@ -9,6 +10,7 @@ GMapping is a highly efficient Rao-Blackwellized particle filer to learn grid ma
 
 ### Navigation
 For navigation and object avoidance we use the ROS Navigation stack, which is based on the Dijkstra's, a variant of the Uniform Cost Search algorithm.
+
 ---
 
 ## Dependencies
