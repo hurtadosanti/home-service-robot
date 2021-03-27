@@ -28,7 +28,7 @@ For navigation and object avoidance we use the ROS Navigation stack, which is ba
 
 - Clone this repository on the src folder location
   
-        git clone git@github.com:hurtadosanti/home-service-robot.git ./src
+        git clone --recursive git@github.com:hurtadosanti/home-service-robot.git ./src
 
 - Initialize workspace
         
