@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
 
     marker.lifetime = ros::Duration();
 
-    while (ros::ok()){
+    /*while (ros::ok()){
         //ROS_INFO_STREAM("state:"<<actual_state);
         if(actual_state==PICKING_UP){           
             marker.pose.position.x = pickup_x;
@@ -99,6 +99,26 @@ int main(int argc, char **argv) {
             break;
         }
         ros::spinOnce();
+    }*/
+     while (ros::ok()){
+        //ROS_INFO_STREAM("state:"<<actual_state);
+            marker.pose.position.x = pickup_x;
+            marker.pose.position.y = pickup_y;
+            marker.pose.position.z = 0;
+            marker.action = visualization_msgs::Marker::ADD;    
+            marker_pub.publish(marker);
+            r.sleep();
+            ROS_INFO("Publish at drop zone");
+            marker.action = visualization_msgs::Marker::DELETE;
+            marker_pub.publish(marker);
+            marker.pose.position.x = drop_x;
+            marker.pose.position.y = drop_y;
+            marker.pose.position.z = 0;
+            marker.action = visualization_msgs::Marker::ADD;
+            marker_pub.publish(marker);
+            actual_state=DROPING;
+            r.sleep();
+        ros::spin();
     }
     ROS_INFO("Done");
     return 0;
