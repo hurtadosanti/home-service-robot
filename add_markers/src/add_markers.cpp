@@ -3,12 +3,11 @@
 #include <nav_msgs/Odometry.h>
 #include <math.h>
 
-
 double pickup_x=-3.0;
 double pickup_y=2.0;
 
 double drop_x=0.0;
-double drop_y=-1.0;
+double drop_y=0.0;
 
 
 enum state {PICKING_UP,PUBLISH_TARGET,DROPING,DROPED};
