@@ -5,7 +5,7 @@ double pickup_x=-3.0;
 double pickup_y=2.0;
 
 double drop_x=0.0;
-double drop_y=-1.0;
+double drop_y=0.0;
 
 int main(int argc, char **argv) {
     ros::init(argc, argv, "add_markers");

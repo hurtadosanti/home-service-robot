@@ -1,0 +1,11 @@
+<launch>
+  <include file="$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
+    <arg name="world_file" default="$(find add_markers)/worlds/Apartment.world"/>
+  </include>
+  <include file="$(find turtlebot_gazebo)/launch/amcl_demo.launch">
+      <arg name="map_file" default="$(find add_markers)/maps/apartment.yaml"/>
+      <arg name="initial_pose_x" default="0.0"/>
+      <arg name="initial_pose_y" default="0.0"/>
+      <arg name="initial_pose_a" default="0.0"/>
+  </include>
+</launch>
