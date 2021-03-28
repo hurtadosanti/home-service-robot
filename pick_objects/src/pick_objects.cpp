@@ -5,11 +5,11 @@
 // Define a client for to send goal requests to the move_base server through a SimpleActionClient
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
-double pickup_x=-3.0;
-double pickup_y=2.0;
+double pickup_x=0.5;
+double pickup_y=0.0;
 
-double drop_x=0.0;
-double drop_y=0.0;
+double drop_x=-2.0;
+double drop_y=2.0;
 
 int main(int argc, char **argv) {
   bool reach_pickup = false;

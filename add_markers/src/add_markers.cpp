@@ -3,12 +3,11 @@
 #include <nav_msgs/Odometry.h>
 #include <math.h>
 
-double pickup_x=-3.0;
-double pickup_y=2.0;
+double pickup_x=0.5;
+double pickup_y=0.0;
 
-double drop_x=0.0;
-double drop_y=0.0;
-
+double drop_x=-2.0;
+double drop_y=2.0;
 
 enum state {PICKING_UP,PUBLISH_TARGET,DROPING,DROPED};
 
@@ -19,7 +18,7 @@ double distance(double x2,double x1,double y2,double y1){
 
 void odometry_callback(const nav_msgs::Odometry::ConstPtr& msg){
   	double pickup_dist=distance(pickup_x,msg->pose.pose.position.x,pickup_y,msg->pose.pose.position.y);
-    double drop_dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y);
+    double drop_dist= distance(drop_x,msg->pose.pose.position.x,drop_y,msg->pose.pose.position.y*-1);
     ROS_INFO("Pickup: %f  drop: %f position:x%f y%f",pickup_dist,drop_dist,msg->pose.pose.position.x,msg->pose.pose.position.y);
     //ROS_INFO_STREAM("state:"<<actual_state);
     switch (actual_state)

@@ -329,7 +329,7 @@ Visualization Manager:
           Draw Behind: true
           Enabled: true
           Name: Costmap
-          Topic: /app_manager/application/move_base/global_costmap/costmap
+          Topic: /move_base/global_costmap/costmap
           Unreliable: false
           Use Timestamp: false
           Value: true
@@ -366,7 +366,7 @@ Visualization Manager:
           Draw Behind: false
           Enabled: true
           Name: Costmap
-          Topic: /app_manager/application/move_base/local_costmap/costmap
+          Topic: /move_base/local_costmap/costmap
           Unreliable: false
           Use Timestamp: false
           Value: true
