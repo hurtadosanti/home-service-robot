@@ -1,0 +1,9 @@
+<launch>
+  <include file="$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
+    <arg name="world_file" default="$(find add_markers)/worlds/Apartment.world"/>
+  </include>
+  <include file="$(find turtlebot_gazebo)/launch/amcl_demo.launch">
+      <arg name="map_file" default="$(find add_markers)/maps/"/>
+  </include>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find add_markers)/rviz/home_service.rviz"/>
+</launch>
