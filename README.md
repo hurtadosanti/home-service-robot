@@ -1,6 +1,6 @@
 # Home Service Robot
 
-On this project we simulate a full home service robot capable of navigating to pick up and deliver virtual objects. The robot we use is the turtlebot provided by ROS. The robot is capable to localize, map and navigate using a fusion of LIDAR, camera and odometer. We have used the SLAM_gmapping module and the AMCL adaptive Monte Carlo localization provided by ROS.
+On this Udacity project we simulate a full home service robot capable of navigating to pick up and deliver virtual objects. The robot we use is the turtlebot provided by ROS. The robot is capable to localize, map and navigate using a fusion of LIDAR, camera and odometer. We have used the SLAM_gmapping module and the AMCL adaptive Monte Carlo localization provided by ROS.
 
 ---
 
