@@ -4,6 +4,9 @@
   </include>
   <include file="$(find turtlebot_gazebo)/launch/amcl_demo.launch">
       <arg name="map_file" default="$(find add_markers)/maps/apartment.yaml"/>
+      <arg name="initial_pose_x" default="0.5"/>
+      <arg name="initial_pose_y" default="-1.0"/>
+      <arg name="initial_pose_a" default="-1.55"/>
   </include>
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find add_markers)/rviz/home_service.rviz"/>
 </launch>
